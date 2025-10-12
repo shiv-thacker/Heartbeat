@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { setUser, triggerReturnToSplash } from '../../redux/slices/userSlice';
+import { setUser } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
 import { fontSizes, fontWeights } from '../../theme/fonts';
 import metrics from '../../theme/metrics';
@@ -70,7 +70,7 @@ export default function RegisterScreen({ navigation }) {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => dispatch(triggerReturnToSplash())}>
+        <TouchableOpacity onPress={() => navigation.navigate('SplashLogin')}>
           <Text style={styles.linkText}>
             Already have an account? <Text style={styles.linkBold}>Login</Text>
           </Text>

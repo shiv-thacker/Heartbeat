@@ -5,7 +5,6 @@ const userSlice = createSlice({
   initialState: {
     info: null, // Start with no user logged in
     loading: false,
-    returnToSplash: false, // Flag to trigger return to splash with login
     tempEmail: null, // Temporary storage for email during OTP flow
   },
   reducers: {
@@ -20,24 +19,11 @@ const userSlice = createSlice({
     setLoading(state, action) {
       state.loading = action.payload;
     },
-    triggerReturnToSplash(state) {
-      state.returnToSplash = true;
-    },
-    resetReturnToSplash(state) {
-      state.returnToSplash = false;
-    },
     setTempEmail(state, action) {
       state.tempEmail = action.payload;
     },
   },
 });
 
-export const {
-  setUser,
-  logout,
-  setLoading,
-  triggerReturnToSplash,
-  resetReturnToSplash,
-  setTempEmail,
-} = userSlice.actions;
+export const { setUser, logout, setLoading, setTempEmail } = userSlice.actions;
 export default userSlice.reducer;

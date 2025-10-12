@@ -1,56 +1,22 @@
 import { Image } from 'expo-image';
-import { useEffect, useState } from 'react';
-import { Alert, Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTempEmail } from '../../redux/slices/userSlice';
+import { useEffect } from 'react';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import colors from '../../theme/colors';
-import { fontSizes, fontWeights } from '../../theme/fonts';
-import metrics from '../../theme/metrics';
+import { fontWeights } from '../../theme/fonts';
 
-export default function SplashScreen({
-  onAnimationFinish,
-  onNavigateToRegister,
-  onNavigateToOtp,
-  skipAnimations = false,
-}) {
+export default function SplashScreen({ onAnimationFinish, skipAnimations = false }) {
   const user = useSelector((state) => state.user.info);
   const isLoggedIn = !!user;
-  const dispatch = useDispatch();
-
-  // Login form state
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  // Debug logging
-  console.log('SplashScreen - User:', user);
-  console.log('SplashScreen - IsLoggedIn:', isLoggedIn);
-  console.log('SplashScreen - SkipAnimations:', skipAnimations);
 
   // Animation values for pop-up effect
   const iconScale = new Animated.Value(skipAnimations ? 1 : 0);
   const iconOpacity = new Animated.Value(skipAnimations ? 1 : 0);
   const textOpacity = new Animated.Value(skipAnimations ? 1 : 0);
-  const iconTranslateY = new Animated.Value(skipAnimations ? -100 : 0);
-  const signInOpacity = new Animated.Value(skipAnimations ? 1 : 0);
-
-  const handleSendOtp = () => {
-    // Validate email
-    if (!email || !email.includes('@')) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address');
-      return;
-    }
-
-    // Store email in Redux for OTP screen
-    dispatch(setTempEmail(email));
-
-    // Navigate to OTP screen
-    if (onNavigateToOtp) {
-      onNavigateToOtp(email);
-    }
-  };
+  const logoTranslateY = new Animated.Value(0); // For moving up animation
 
   useEffect(() => {
-    // If skipAnimations is true, don't run any animations - login form is already visible
+    // If skipAnimations is true, don't run any animations
     if (skipAnimations) {
       return;
     }
@@ -87,33 +53,22 @@ export default function SplashScreen({
       }).start();
     }, 1200);
 
-    if (isLoggedIn) {
-      // User is logged in - redirect to main app after animations complete (2.5 seconds)
-      setTimeout(() => {
-        if (onAnimationFinish) {
-          onAnimationFinish();
-        }
-      }, 2500);
-    } else {
-      // User not logged in - after 1.5 seconds, move heart up and show sign-in fragment
-      setTimeout(() => {
-        Animated.parallel([
-          Animated.timing(iconTranslateY, {
-            toValue: -100, // Move heart up
-            duration: 800,
-            useNativeDriver: true,
-          }),
-          Animated.timing(signInOpacity, {
-            toValue: 1, // Show sign-in fragment
-            duration: 600,
-            useNativeDriver: true,
-          }),
-        ]).start();
-      }, 1500);
+    // After 1.8 seconds, move logo up slightly
+    setTimeout(() => {
+      Animated.timing(logoTranslateY, {
+        toValue: -30, // Move up by 30 pixels
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }, 1800);
 
-      // Don't auto-finish - wait for user interaction
-    }
-  }, [isLoggedIn, skipAnimations]);
+    // After all animations complete, call finish callback
+    setTimeout(() => {
+      if (onAnimationFinish) {
+        onAnimationFinish();
+      }
+    }, 2500);
+  }, [skipAnimations]);
 
   return (
     <View style={styles.container}>
@@ -129,7 +84,7 @@ export default function SplashScreen({
         style={[
           styles.logoContainer,
           {
-            transform: [{ translateY: iconTranslateY }],
+            transform: [{ translateY: logoTranslateY }],
           },
         ]}
       >
@@ -161,52 +116,6 @@ export default function SplashScreen({
           <Text style={styles.logoText}>Heartbeat</Text>
         </Animated.View>
       </Animated.View>
-
-      {/* Login Form (only shown when not logged in) */}
-      {!isLoggedIn && (
-        <Animated.View
-          style={[
-            styles.signInContainer,
-            {
-              opacity: signInOpacity,
-            },
-          ]}
-        >
-          <View style={styles.signInBox}>
-            {/* <Text style={styles.signInTitle}>Welcome to Heartbeat</Text>
-            <Text style={styles.signInSubtitle}>Sign in to continue</Text> */}
-
-            <TextInput
-              style={styles.input}
-              placeholder="Email Address"
-              placeholderTextColor={colors.textTertiary}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            {/* <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor={colors.textSecondary}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            /> */}
-
-            <TouchableOpacity style={styles.loginButton} onPress={handleSendOtp}>
-              <Text style={styles.loginButtonText}>Send OTP</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={onNavigateToRegister} style={styles.registerLink}>
-              <Text style={styles.linkText}>
-                Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      )}
     </View>
   );
 }
@@ -230,20 +139,20 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1, // Ensure content appears above background
+    zIndex: 1,
   },
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: -20, // Reduced space between icon and text
+    marginBottom: -20,
   },
   heartIcon: {
     width: 170,
     height: 170,
   },
   textContainer: {
-    alignItems: 'start',
-    justifyContent: 'start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logoText: {
     fontSize: 22,
@@ -251,86 +160,5 @@ const styles = StyleSheet.create({
     color: colors.white,
     letterSpacing: 1,
     textAlign: 'center',
-  },
-  signInContainer: {
-    position: 'absolute',
-    bottom: 40,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 2,
-  },
-  signInBox: {
-    width: '100%',
-    // backgroundColor: 'rgba(255, 255, 255, 0.98)',
-    // borderRadius: 20,
-    // padding: 24,
-    // marginHorizontal: 24,
-    // width: '90%',
-    // maxWidth: 400,
-    // shadowColor: colors.black,
-    // shadowOffset: { width: 0, height: 8 },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 12,
-    // elevation: 12,
-    padding: metrics.spacing.lg,
-  },
-  signInTitle: {
-    fontSize: fontSizes.xxl,
-    fontWeight: fontWeights.bold,
-    color: colors.text,
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  signInSubtitle: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.medium,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: metrics.spacing.lg,
-  },
-  input: {
-    width: '100%',
-    height: metrics.inputHeight || 50,
-    borderBottomWidth: 1,
-    backgroundColor: colors.transparent,
-    borderBottomColor: colors.border || '#E0E0E0',
-    borderRadius: metrics.borderRadius.md || 8,
-
-    marginBottom: metrics.spacing.md || 12,
-    fontSize: fontSizes.md,
-
-    color: colors.textWhite,
-  },
-  loginButton: {
-    height: metrics.buttonHeight || 50,
-    backgroundColor: colors.white,
-    borderRadius: metrics.borderRadius.md || 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: metrics.spacing.sm || 8,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  loginButtonText: {
-    color: colors.primary,
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-  },
-  registerLink: {
-    marginTop: metrics.spacing.md || 12,
-    alignItems: 'center',
-  },
-  linkText: {
-    textAlign: 'center',
-    fontSize: fontSizes.sm,
-    color: colors.textTertiary,
-  },
-  linkBold: {
-    color: colors.white,
-    fontWeight: fontWeights.semibold,
   },
 });

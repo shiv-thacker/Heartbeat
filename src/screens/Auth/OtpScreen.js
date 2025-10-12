@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, triggerReturnToSplash } from '../../redux/slices/userSlice';
+import { setUser } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
 import { fontSizes, fontWeights } from '../../theme/fonts';
 import metrics from '../../theme/metrics';
@@ -158,7 +158,7 @@ export default function OtpScreen({ navigation }) {
           {/* Back to Login */}
           <TouchableOpacity
             style={styles.backButton}
-            onPress={() => dispatch(triggerReturnToSplash())}
+            onPress={() => navigation.navigate('SplashLogin')}
             disabled={isValidating}
           >
             <Text style={styles.backButtonText}>← Back to Login</Text>
