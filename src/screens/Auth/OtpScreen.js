@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -27,9 +28,12 @@ export default function OtpScreen({ navigation }) {
   // State for 6 OTP digits
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isValidating, setIsValidating] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  const [canResend, setCanResend] = useState(true);
 
   // Refs for each input box
   const inputRefs = useRef([]);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     // Auto-focus first input on mount
@@ -90,7 +94,7 @@ export default function OtpScreen({ navigation }) {
     } else {
       // Invalid OTP99
       setTimeout(() => {
-        Alert.alert('Invalid OTP', 'Please enter the correct OTP code (999999)', [
+        Alert.alert('Invalid Code', 'Please enter the correct OTP code (999999)', [
           {
             text: 'OK',
             onPress: () => {
@@ -105,10 +109,35 @@ export default function OtpScreen({ navigation }) {
   };
 
   const handleResendOtp = () => {
-    Alert.alert('OTP Sent', 'A new OTP has been sent to your email');
+    if (!canResend) return;
+
+    // Start 30-second countdown
+    setResendTimer(30);
+    setCanResend(false);
+
+    // Start timer
+    timerRef.current = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev <= 1) {
+          setCanResend(true);
+          clearInterval(timerRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
     setOtp(['', '', '', '', '', '']);
     inputRefs.current[0]?.focus();
   };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -172,10 +201,24 @@ export default function OtpScreen({ navigation }) {
             </View>
             {/* Validating Text */}
             {isValidating && <Text style={styles.validatingText}>Validating OTP...</Text>}
-            {/* Resend OTP */}
           </View>
         </ScrollView>
+        <View style={[styles.resendSection, { paddingBottom: ios ? 34 : metrics.spacing.lg }]}>
+          <TouchableOpacity
+            style={styles.resendButton}
+            onPress={handleResendOtp}
+            disabled={!canResend}
+          >
+            <Text style={[styles.resendButtonText, !canResend && styles.resendButtonDisabled]}>
+              {canResend
+                ? 'Resend Code'
+                : `Resend Code in 00:${resendTimer.toString().padStart(2, '0')}`}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
+
+      {/* Resend OTP Section - Fixed at Bottom */}
     </View>
   );
 }
@@ -257,7 +300,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.borderRadius.md || 12,
     textAlign: 'center',
     fontSize: fontSizes.xxl || 24,
-    fontWeight: fontWeights.bold,
+
     color: colors.text,
     backgroundColor: colors.backgroundSecondary,
   },
@@ -265,13 +308,10 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     backgroundColor: 'rgba(255, 107, 157, 0.05)',
   },
-  otpInputValidating: {
-    borderColor: colors.success || '#34C759',
-    backgroundColor: 'rgba(52, 199, 89, 0.05)',
-  },
+  otpInputValidating: {},
   validatingText: {
     fontSize: fontSizes.md,
-    color: colors.success || '#34C759',
+    color: colors.white,
     fontWeight: fontWeights.semibold,
     marginTop: -metrics.spacing.lg || -16,
     marginBottom: metrics.spacing.lg || 16,
@@ -312,5 +352,27 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.sm || 14,
     color: colors.primary,
     textAlign: 'center',
+  },
+  resendSection: {
+    position: 'relative',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: metrics.spacing.md,
+    alignItems: 'center',
+  },
+  resendButton: {
+    paddingVertical: metrics.spacing.md,
+    paddingHorizontal: metrics.spacing.xl,
+  },
+  resendButtonText: {
+    fontSize: fontSizes.sm,
+    color: colors.white,
+    fontWeight: fontWeights.bold,
+    textAlign: 'center',
+  },
+  resendButtonDisabled: {
+    color: colors.backgroundSecondary,
+    opacity: 0.7,
   },
 });

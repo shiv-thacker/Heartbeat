@@ -1,6 +1,17 @@
 import { Image } from 'expo-image';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Animated, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Animated,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setTempEmail } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
@@ -43,33 +54,43 @@ export default function SplashLoginScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {/* Gradient Background */}
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Image
         source={require('../../assets/images/splash_background.png')}
         style={styles.backgroundImage}
         contentFit="cover"
       />
-
-      {/* Heart Icon */}
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../assets/images/heart_icon.png')}
-          style={styles.heartIcon}
-          contentFit="contain"
-        />
-        <Text style={styles.logoText}>Heartbeat</Text>
-      </View>
-
-      {/* Login Form with Fade-in Animation */}
-      <Animated.View
-        style={[
-          styles.signInContainer,
-          {
-            opacity: formOpacity,
-          },
-        ]}
+      <KeyboardAvoidingView
+        style={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+          padding: metrics.spacing.lg,
+          height: '100%',
+        }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
+        {/* Gradient Background */}
+        <View></View>
+        {/* Heart Icon */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/images/heart_icon.png')}
+            style={styles.heartIcon}
+            contentFit="contain"
+          />
+          <Text style={styles.logoText}>Heartbeat</Text>
+        </View>
+
+        {/* Login Form with Fade-in Animation */}
+
         <View style={styles.signInBox}>
           <TextInput
             style={styles.input}
@@ -91,18 +112,15 @@ export default function SplashLoginScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-      </Animated.View>
-    </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    backgroundColor: colors.tertiary, // Match splash background color to prevent white blink
+    // Match splash background color to prevent white blink
   },
   backgroundImage: {
     position: 'absolute',
@@ -117,7 +135,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1,
-    marginBottom: 100,
   },
   heartIcon: {
     width: 170,
@@ -141,7 +158,7 @@ const styles = StyleSheet.create({
   },
   signInBox: {
     width: '100%',
-    padding: metrics.spacing.lg,
+    paddingBottom: metrics.spacing.xxl,
   },
   input: {
     width: '100%',
