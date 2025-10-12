@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundSecondary,
+    padding: metrics.spacing.lg,
   },
   header: {
     backgroundColor: colors.background,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   cardContainer: {
-    padding: metrics.spacing.md,
+    paddingVertical: metrics.spacing.md,
   },
   card: {
     backgroundColor: colors.background,
