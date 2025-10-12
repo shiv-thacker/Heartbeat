@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    backgroundColor: '#FFDAB9', // Match splash background color to prevent white blink
+    backgroundColor: colors.tertiary, // Match splash background color to prevent white blink
   },
   backgroundImage: {
     position: 'absolute',

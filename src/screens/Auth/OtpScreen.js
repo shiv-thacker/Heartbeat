@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
@@ -19,6 +20,9 @@ import metrics from '../../theme/metrics';
 export default function OtpScreen({ navigation }) {
   const dispatch = useDispatch();
   const email = useSelector((state) => state.user.tempEmail);
+
+  const ios = Platform.OS === 'ios';
+  const { top } = useSafeAreaInsets();
 
   // State for 6 OTP digits
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -84,7 +88,7 @@ export default function OtpScreen({ navigation }) {
         setIsValidating(false);
       }, 500);
     } else {
-      // Invalid OTP
+      // Invalid OTP99
       setTimeout(() => {
         Alert.alert('Invalid OTP', 'Please enter the correct OTP code (999999)', [
           {
@@ -107,84 +111,114 @@ export default function OtpScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Enter OTP</Text>
-            <Text style={styles.subtitle}>
-              We've sent a verification code to{'\n'}
-              <Text style={styles.email}>{email || 'your email'}</Text>
-            </Text>
+    <View style={styles.container}>
+      {/* Gradient Background */}
+      <Image
+        source={require('../../assets/images/splash_background.png')}
+        style={styles.backgroundImage}
+        contentFit="cover"
+      />
+
+      {/* OTP Overlay */}
+      <Image
+        source={require('../../assets/images/otp_overlay.png')}
+        style={styles.overlayImage}
+        contentFit="cover"
+      />
+
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingTop: ios ? top + metrics.spacing.lg : metrics.spacing.lg + 10 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.content}>
+            {/* Header */}
+            <View style={styles.header}>
+              <Text style={styles.logoname}>Heartbeat</Text>
+              <View style={{ height: metrics.spacing.xxl }}></View>
+              <Text style={styles.title}>GRETTINGS{'\n'}MR.SHIVANG</Text>
+              <View style={{ height: metrics.spacing.md }}></View>
+              <Text style={styles.subtitle}>
+                {'Kindly log in with the code we’ve sent you via  '}
+                <Text style={styles.email}>{email || 'your email'}</Text>
+              </Text>
+            </View>
+            {/* OTP Input Boxes */}
+            <View style={styles.otpContainer}>
+              {otp.map((digit, index) => (
+                <TextInput
+                  key={index}
+                  ref={(ref) => (inputRefs.current[index] = ref)}
+                  style={[
+                    styles.otpInput,
+                    // digit ? styles.otpInputFilled : null,
+                    isValidating ? styles.otpInputValidating : null,
+                  ]}
+                  value={digit}
+                  onChangeText={(value) => handleOtpChange(value, index)}
+                  onKeyPress={(e) => handleKeyPress(e, index)}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  selectTextOnFocus
+                  editable={!isValidating}
+                />
+              ))}
+            </View>
+            {/* Validating Text */}
+            {isValidating && <Text style={styles.validatingText}>Validating OTP...</Text>}
+            {/* Resend OTP */}
           </View>
-
-          {/* OTP Input Boxes */}
-          <View style={styles.otpContainer}>
-            {otp.map((digit, index) => (
-              <TextInput
-                key={index}
-                ref={(ref) => (inputRefs.current[index] = ref)}
-                style={[
-                  styles.otpInput,
-                  digit ? styles.otpInputFilled : null,
-                  isValidating ? styles.otpInputValidating : null,
-                ]}
-                value={digit}
-                onChangeText={(value) => handleOtpChange(value, index)}
-                onKeyPress={(e) => handleKeyPress(e, index)}
-                keyboardType="number-pad"
-                maxLength={1}
-                selectTextOnFocus
-                editable={!isValidating}
-              />
-            ))}
-          </View>
-
-          {/* Validating Text */}
-          {isValidating && <Text style={styles.validatingText}>Validating OTP...</Text>}
-
-          {/* Resend OTP */}
-          <View style={styles.resendContainer}>
-            <Text style={styles.resendText}>Didn't receive the code? </Text>
-            <TouchableOpacity onPress={handleResendOtp} disabled={isValidating}>
-              <Text style={styles.resendLink}>Resend OTP</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Back to Login */}
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.navigate('SplashLogin')}
-            disabled={isValidating}
-          >
-            <Text style={styles.backButtonText}>← Back to Login</Text>
-          </TouchableOpacity>
-
-          {/* Hint Text */}
-          <View style={styles.hintContainer}>
-            <Text style={styles.hintText}>💡 Hint: Enter 999999 to verify</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.tertiary, // Match splash background color
+  },
+  logoname: {
+    color: colors.white,
+    fontSize: fontSizes.md,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
+  overlayImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0, // Semi-transparent overlay
+  },
+  keyboardView: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
-    padding: metrics.spacing.xl,
+    justifyContent: 'start',
+    padding: metrics.spacing.lg,
   },
   content: {
+    width: '100%',
+
     alignItems: 'center',
   },
   header: {
@@ -193,19 +227,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSizes.xxxl || 32,
-    fontWeight: fontWeights.bold,
-    color: colors.text,
+
+    color: colors.white,
+    letterSpacing: 1.5,
     marginBottom: metrics.spacing.sm || 8,
+    fontFamily: 'Times New Roman',
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: fontSizes.md || 16,
-    color: colors.textSecondary,
+    color: colors.backgroundSecondary,
     textAlign: 'center',
     lineHeight: 24,
   },
   email: {
-    color: colors.primary,
-    fontWeight: fontWeights.semibold,
+    color: colors.backgroundSecondary,
   },
   otpContainer: {
     flexDirection: 'row',
@@ -217,13 +253,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 60,
     borderWidth: 2,
-    borderColor: colors.border || '#E0E0E0',
+    borderColor: colors.backgroundSecondary,
     borderRadius: metrics.borderRadius.md || 12,
     textAlign: 'center',
     fontSize: fontSizes.xxl || 24,
     fontWeight: fontWeights.bold,
     color: colors.text,
-    backgroundColor: colors.white,
+    backgroundColor: colors.backgroundSecondary,
   },
   otpInputFilled: {
     borderColor: colors.primary,
@@ -247,12 +283,13 @@ const styles = StyleSheet.create({
   },
   resendText: {
     fontSize: fontSizes.md,
-    color: colors.textSecondary,
+    color: colors.white,
   },
   resendLink: {
     fontSize: fontSizes.md,
-    color: colors.primary,
-    fontWeight: fontWeights.semibold,
+    color: colors.white,
+    fontWeight: fontWeights.bold,
+    textDecorationLine: 'underline',
   },
   backButton: {
     marginTop: metrics.spacing.xxl || 40,
@@ -260,7 +297,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: fontSizes.md,
-    color: colors.textSecondary,
+    color: colors.white,
     fontWeight: fontWeights.medium,
   },
   hintContainer: {
