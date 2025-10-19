@@ -13,7 +13,6 @@ export default function SplashScreen({ onAnimationFinish, skipAnimations = false
   const iconScale = new Animated.Value(skipAnimations ? 1 : 0);
   const iconOpacity = new Animated.Value(skipAnimations ? 1 : 0);
   const textOpacity = new Animated.Value(skipAnimations ? 1 : 0);
-  const logoTranslateY = new Animated.Value(0); // For moving up animation
 
   useEffect(() => {
     // If skipAnimations is true, don't run any animations
@@ -53,21 +52,12 @@ export default function SplashScreen({ onAnimationFinish, skipAnimations = false
       }).start();
     }, 1200);
 
-    // After 1.8 seconds, move logo up slightly
-    setTimeout(() => {
-      Animated.timing(logoTranslateY, {
-        toValue: -30, // Move up by 30 pixels
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }, 1800);
-
     // After all animations complete, call finish callback
     setTimeout(() => {
       if (onAnimationFinish) {
         onAnimationFinish();
       }
-    }, 2500);
+    }, 2000);
   }, [skipAnimations]);
 
   return (
@@ -80,14 +70,7 @@ export default function SplashScreen({ onAnimationFinish, skipAnimations = false
       />
 
       {/* Heart Icon with Pop-up Animation */}
-      <Animated.View
-        style={[
-          styles.logoContainer,
-          {
-            transform: [{ translateY: logoTranslateY }],
-          },
-        ]}
-      >
+      <Animated.View style={styles.logoContainer}>
         <Animated.View
           style={[
             styles.iconContainer,

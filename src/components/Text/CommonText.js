@@ -1,6 +1,6 @@
-import colors from '@theme/colors';
-import { fontSizes, fontWeights } from '@theme/fonts';
 import { StyleSheet, Text } from 'react-native';
+import colors from '../../theme/colors';
+import { fontSizes, fontWeights } from '../../theme/fonts';
 
 const CommonText = ({
   children,

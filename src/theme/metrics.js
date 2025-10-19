@@ -18,22 +18,24 @@ export const metrics = {
 
   // Vspacing
   Vspacing: {
+    xxs: height * 0.01,
     xs: height * 0.02,
     sm: height * 0.04,
-    md: height * 0.08,
-    lg: height * 0.12,
-    xl: height * 0.16,
-    xxl: height * 0.24,
-    xxxl: height * 0.32,
+    md: height * 0.06,
+    lg: height * 0.08,
+    xl: height * 0.12,
+    xxl: height * 0.16,
+    xxxl: height * 0.24,
   },
   VspacingFonts: {
     xs: height * 0.005,
     sm: height * 0.01,
-    md: height * 0.02,
-    lg: height * 0.03,
-    xl: height * 0.04,
-    xxl: height * 0.06,
-    xxxl: height * 0.08,
+    md: height * 0.015,
+    lg: height * 0.02,
+    xl: height * 0.03,
+    xxl: height * 0.04,
+    xxxl: height * 0.06,
+    xxxxl: height * 0.08,
   },
 
   spacing: {

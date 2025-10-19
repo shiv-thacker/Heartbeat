@@ -1,8 +1,7 @@
 import { Image } from 'expo-image';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {
   Alert,
-  Animated,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -22,9 +21,6 @@ export default function SplashLoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
 
-  // Animation value for login form fade-in
-  const formOpacity = useRef(new Animated.Value(0)).current;
-
   const handleSendOtp = () => {
     // Validate email
     if (!email || !email.includes('@')) {
@@ -42,16 +38,6 @@ export default function SplashLoginScreen({ navigation }) {
   const handleNavigateToRegister = () => {
     navigation.navigate('Register');
   };
-
-  // Fade in the login form when component mounts
-  useEffect(() => {
-    Animated.timing(formOpacity, {
-      toValue: 1,
-      duration: 800,
-      delay: 300, // Small delay for better UX
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
   return (
     <ScrollView
@@ -89,8 +75,7 @@ export default function SplashLoginScreen({ navigation }) {
           <Text style={styles.logoText}>Heartbeat</Text>
         </View>
 
-        {/* Login Form with Fade-in Animation */}
-
+        {/* Login Form */}
         <View style={styles.signInBox}>
           <TextInput
             style={styles.input}

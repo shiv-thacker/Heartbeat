@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
+import CommonText from '../../components/Text/index';
 import { setUser } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
 import { fontSizes, fontWeights } from '../../theme/fonts';
@@ -169,14 +170,37 @@ export default function OtpScreen({ navigation }) {
           <View style={styles.content}>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.logoname}>Heartbeat</Text>
-              <View style={{ height: metrics.Hspacing.xxl }}></View>
-              <Text style={styles.title}>GRETTINGS{'\n'}MR.SHIVANG</Text>
-              <View style={{ height: metrics.Hspacing.md }}></View>
-              <Text style={styles.subtitle}>
-                {'Kindly log in with the code we’ve sent you via  '}
-                <Text style={styles.email}>{email || 'your email'}</Text>
-              </Text>
+              <CommonText type="b1" color={colors.white}>
+                Heartbeat
+              </CommonText>
+              <View style={{ height: metrics.Vspacing.md }}></View>
+              <CommonText
+                type="h3"
+                style={{
+                  textAlign: 'center',
+                  letterSpacing: 1.5,
+                  fontFamily: 'Times New Roman',
+                  fontWeight: '400',
+                }}
+                color={colors.white}
+              >
+                WELCOME BACK{'\n'}MR.SHIVANG
+              </CommonText>
+              <View style={{ height: metrics.Vspacing.xxs }}></View>
+              <CommonText
+                type="body"
+                color={colors.backgroundSecondary}
+                style={{ textAlign: 'center' }}
+              >
+                Enter the verification code sent to your email{' '}
+                <CommonText
+                  type="body"
+                  color={colors.backgroundSecondary}
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {email || 'your email'}
+                </CommonText>
+              </CommonText>
             </View>
             {/* OTP Input Boxes */}
             <View style={styles.otpContainer}>
@@ -266,7 +290,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: metrics.Hspacing.xxl || 40,
+    marginBottom: metrics.Vspacing.md || 40,
   },
   title: {
     fontSize: fontSizes.xxxl || 32,
@@ -289,6 +313,8 @@ const styles = StyleSheet.create({
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
     marginBottom: metrics.Hspacing.xl || 32,
     gap: 12,
   },
@@ -299,7 +325,7 @@ const styles = StyleSheet.create({
     borderColor: colors.backgroundSecondary,
     borderRadius: metrics.borderRadius.md || 12,
     textAlign: 'center',
-    fontSize: fontSizes.xxl || 24,
+    fontSize: fontSizes.xl || 24,
 
     color: colors.text,
     backgroundColor: colors.backgroundSecondary,
@@ -366,7 +392,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: metrics.Hspacing.xl,
   },
   resendButtonText: {
-    fontSize: fontSizes.sm,
+    fontSize: fontSizes.md,
     color: colors.white,
     fontWeight: fontWeights.bold,
     textAlign: 'center',
