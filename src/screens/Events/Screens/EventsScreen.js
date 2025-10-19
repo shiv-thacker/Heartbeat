@@ -1,8 +1,8 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import colors from '../../theme/colors';
-import { fontSizes, fontWeights } from '../../theme/fonts';
-import metrics from '../../theme/metrics';
+import colors from '../../../theme/colors';
+import { fontSizes, fontWeights } from '../../../theme/fonts';
+import metrics from '../../../theme/metrics';
 
 export default function ProfileScreen() {
   const user = useSelector((state) => state.user.info);
