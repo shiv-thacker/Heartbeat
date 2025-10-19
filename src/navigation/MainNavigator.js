@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useState } from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +16,43 @@ import SettingsScreen from '../screens/Settings/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+// Custom Tab Icon Component with Press Effect
+const TabIcon = ({
+  focused,
+  activeImage,
+  inactiveImage,
+  activeSize,
+  inactiveSize,
+  activeTintColor,
+  inactiveTintColor,
+}) => {
+  const [isPressed, setIsPressed] = useState(false);
+
+  return (
+    <View
+      style={[styles.tabButtonContainer, isPressed && styles.tabButtonPressed]}
+      onTouchStart={() => setIsPressed(true)}
+      onTouchEnd={() => setIsPressed(false)}
+    >
+      <View style={styles.tabIconContainer}>
+        {focused ? (
+          <Image
+            source={activeImage}
+            tintColor={activeTintColor}
+            style={activeSize ? [styles.tabIcon, activeSize] : styles.tabIcon}
+          />
+        ) : (
+          <Image
+            source={inactiveImage}
+            style={inactiveSize ? [styles.tabIcon, inactiveSize] : styles.tabIcon}
+            tintColor={inactiveTintColor}
+          />
+        )}
+      </View>
+    </View>
+  );
+};
 
 // Common Custom Header Component
 function CustomHeader({ title, leftIcon, rightIcon, onLeftPress, onRightPress, user }) {
@@ -84,20 +122,15 @@ function TabNavigator() {
           tabBarShowLabel: false,
           tabBarLabel: 'Home',
 
-          tabBarIcon: ({ color, size, focused }) =>
-            focused ? (
-              <Image
-                source={require('../assets/images/bottomnavigation/home_active.png')}
-                tintColor={colors.primary}
-                style={styles.tabIcon}
-              />
-            ) : (
-              <Image
-                source={require('../assets/images/bottomnavigation/home.png')}
-                style={styles.tabIcon}
-                tintColor={colors.textSecondary}
-              />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabIcon
+              focused={focused}
+              activeImage={require('../assets/images/bottomnavigation/home_active.png')}
+              inactiveImage={require('../assets/images/bottomnavigation/home.png')}
+              activeTintColor={colors.primary}
+              inactiveTintColor={colors.textSecondary}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -105,20 +138,17 @@ function TabNavigator() {
         component={HomeScreen} // Replace with your Explore screen
         options={{
           tabBarLabel: 'Learning',
-          tabBarIcon: ({ color, size, focused }) =>
-            focused ? (
-              <Image
-                source={require('../assets/images/bottomnavigation/learning_active.png')}
-                tintColor={colors.primary}
-                style={[styles.tabIcon, { height: 30, width: 30 }]}
-              />
-            ) : (
-              <Image
-                source={require('../assets/images/bottomnavigation/learning.png')}
-                style={[styles.tabIcon, { height: 30, width: 30 }]}
-                tintColor={colors.textSecondary}
-              />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabIcon
+              focused={focused}
+              activeImage={require('../assets/images/bottomnavigation/learning_active.png')}
+              inactiveImage={require('../assets/images/bottomnavigation/learning.png')}
+              activeSize={{ height: 30, width: 30 }}
+              inactiveSize={{ height: 30, width: 30 }}
+              activeTintColor={colors.primary}
+              inactiveTintColor={colors.textSecondary}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -126,20 +156,17 @@ function TabNavigator() {
         component={ProfileScreen} // Replace with your Favorites screen
         options={{
           tabBarLabel: 'Events',
-          tabBarIcon: ({ color, size, focused }) =>
-            focused ? (
-              <Image
-                source={require('../assets/images/bottomnavigation/calendar_active.png')}
-                style={[styles.tabIcon, { height: 28, width: 28 }]}
-                tintColor={colors.primary}
-              />
-            ) : (
-              <Image
-                source={require('../assets/images/bottomnavigation/calendar.png')}
-                style={[styles.tabIcon, { height: 22, width: 22 }]}
-                tintColor={colors.textSecondary}
-              />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabIcon
+              focused={focused}
+              activeImage={require('../assets/images/bottomnavigation/calendar_active.png')}
+              inactiveImage={require('../assets/images/bottomnavigation/calendar.png')}
+              activeSize={{ height: 28, width: 28 }}
+              inactiveSize={{ height: 22, width: 22 }}
+              activeTintColor={colors.primary}
+              inactiveTintColor={colors.textSecondary}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -147,20 +174,15 @@ function TabNavigator() {
         component={ProfileScreen} // Replace with your Favorites screen
         options={{
           tabBarLabel: 'Documents',
-          tabBarIcon: ({ color, size, focused }) =>
-            focused ? (
-              <Image
-                source={require('../assets/images/bottomnavigation/docs_active.png')}
-                tintColor={colors.primary}
-                style={styles.tabIcon}
-              />
-            ) : (
-              <Image
-                source={require('../assets/images/bottomnavigation/docs.png')}
-                style={styles.tabIcon}
-                tintColor={'grey'}
-              />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabIcon
+              focused={focused}
+              activeImage={require('../assets/images/bottomnavigation/docs_active.png')}
+              inactiveImage={require('../assets/images/bottomnavigation/docs.png')}
+              activeTintColor={colors.primary}
+              inactiveTintColor={colors.textSecondary}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -168,20 +190,15 @@ function TabNavigator() {
         component={SettingsScreen}
         options={{
           tabBarLabel: 'Messages',
-          tabBarIcon: ({ color, size, focused }) =>
-            focused ? (
-              <Image
-                source={require('../assets/images/bottomnavigation/messages_active.png')}
-                tintColor={colors.primary}
-                style={styles.tabIcon}
-              />
-            ) : (
-              <Image
-                source={require('../assets/images/bottomnavigation/messages.png')}
-                style={styles.tabIcon}
-                tintColor={'grey'}
-              />
-            ),
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabIcon
+              focused={focused}
+              activeImage={require('../assets/images/bottomnavigation/messages_active.png')}
+              inactiveImage={require('../assets/images/bottomnavigation/messages.png')}
+              activeTintColor={colors.primary}
+              inactiveTintColor={colors.textSecondary}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -310,6 +327,14 @@ const styles = StyleSheet.create({
     height: 80,
     paddingBottom: 20,
     paddingTop: 8,
+    elevation: 8,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   tabLabel: {
     fontSize: fontSizes.xs,
@@ -319,5 +344,29 @@ const styles = StyleSheet.create({
   tabIcon: {
     width: 24,
     height: 24,
+  },
+  tabButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginHorizontal: 8,
+    borderRadius: 16,
+  },
+  tabButtonPressed: {
+    shadowColor: colors.primary,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 12,
+    elevation: 8,
+    // Light primary color background
+  },
+  tabIconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
