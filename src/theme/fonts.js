@@ -1,26 +1,28 @@
+import metrics from './metrics';
+
 export const fonts = {
-  regular: "System",
-  medium: "System",
-  bold: "System",
-  light: "System",
+  regular: 'System',
+  medium: 'System',
+  bold: 'System',
+  light: 'System',
 };
 
 export const fontSizes = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 18,
-  xl: 20,
-  xxl: 24,
-  xxxl: 32,
+  xs: metrics.VspacingFonts.xs,
+  sm: metrics.VspacingFonts.sm,
+  md: metrics.VspacingFonts.md,
+  lg: metrics.VspacingFonts.lg,
+  xl: metrics.VspacingFonts.xl,
+  xxl: metrics.VspacingFonts.xxl,
+  xxxl: metrics.VspacingFonts.xxxl,
 };
 
 export const fontWeights = {
-  light: "300",
-  regular: "400",
-  medium: "500",
-  semibold: "600",
-  bold: "700",
+  light: '300',
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
 };
 
 export default {

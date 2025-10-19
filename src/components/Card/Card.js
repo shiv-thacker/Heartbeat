@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.background,
     borderRadius: metrics.borderRadius.lg,
-    padding: metrics.spacing.lg,
-    marginBottom: metrics.spacing.md,
+    padding: metrics.Hspacing.lg,
+    marginBottom: metrics.Hspacing.md,
   },
   elevated: {
     shadowColor: colors.black,

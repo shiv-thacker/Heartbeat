@@ -10,7 +10,7 @@ export default StyleSheet.create({
     borderRadius: metrics.borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: metrics.spacing.lg,
+    paddingHorizontal: metrics.Hspacing.lg,
   },
   buttonText: {
     color: colors.white,

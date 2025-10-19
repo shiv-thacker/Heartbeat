@@ -72,7 +72,7 @@ export default function SplashLoginScreen({ navigation }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
-          padding: metrics.spacing.lg,
+          padding: metrics.Hspacing.lg,
           height: '100%',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   signInBox: {
     width: '100%',
-    paddingBottom: metrics.spacing.xxl,
+    paddingBottom: metrics.Hspacing.xxl,
   },
   input: {
     width: '100%',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparent,
     borderBottomColor: colors.border || '#E0E0E0',
     borderRadius: metrics.borderRadius.md || 8,
-    marginBottom: metrics.spacing.md || 12,
+    marginBottom: metrics.Hspacing.md || 12,
     fontSize: fontSizes.md,
     color: colors.white,
   },
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.borderRadius.md || 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: metrics.spacing.sm || 8,
+    marginTop: metrics.Hspacing.sm || 8,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.semibold,
   },
   registerLink: {
-    marginTop: metrics.spacing.md || 12,
+    marginTop: metrics.Hspacing.md || 12,
     alignItems: 'center',
   },
   linkText: {

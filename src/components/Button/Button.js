@@ -117,15 +117,15 @@ const buttonStyles = StyleSheet.create({
   },
   small: {
     height: 36,
-    paddingHorizontal: metrics.spacing.md,
+    paddingHorizontal: metrics.Hspacing.md,
   },
   medium: {
     height: metrics.buttonHeight,
-    paddingHorizontal: metrics.spacing.lg,
+    paddingHorizontal: metrics.Hspacing.lg,
   },
   large: {
     height: 56,
-    paddingHorizontal: metrics.spacing.xl,
+    paddingHorizontal: metrics.Hspacing.xl,
   },
   disabled: {
     opacity: 0.5,

@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/userSlice';
@@ -69,6 +69,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
+        tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: styles.tabBar,
         tabBarActiveTintColor: colors.primary,
@@ -80,50 +81,107 @@ function TabNavigator() {
         name="Home"
         component={HomeScreen}
         options={{
+          tabBarShowLabel: false,
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Text style={[styles.tabIcon, { color, fontSize: size }]}>🏠</Text>
-          ),
+
+          tabBarIcon: ({ color, size, focused }) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/bottomnavigation/home_active.png')}
+                tintColor={colors.primary}
+                style={styles.tabIcon}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bottomnavigation/home.png')}
+                style={styles.tabIcon}
+                tintColor={colors.textSecondary}
+              />
+            ),
         }}
       />
       <Tab.Screen
-        name="Explore"
+        name="Learning"
         component={HomeScreen} // Replace with your Explore screen
         options={{
-          tabBarLabel: 'Explore',
-          tabBarIcon: ({ color, size }) => (
-            <Text style={[styles.tabIcon, { color, fontSize: size }]}>🔍</Text>
-          ),
+          tabBarLabel: 'Learning',
+          tabBarIcon: ({ color, size, focused }) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/bottomnavigation/learning_active.png')}
+                tintColor={colors.primary}
+                style={[styles.tabIcon, { height: 30, width: 30 }]}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bottomnavigation/learning.png')}
+                style={[styles.tabIcon, { height: 30, width: 30 }]}
+                tintColor={colors.textSecondary}
+              />
+            ),
         }}
       />
       <Tab.Screen
-        name="Favorites"
+        name="Events"
         component={ProfileScreen} // Replace with your Favorites screen
         options={{
-          tabBarLabel: 'Favorites',
-          tabBarIcon: ({ color, size }) => (
-            <Text style={[styles.tabIcon, { color, fontSize: size }]}>❤️</Text>
-          ),
+          tabBarLabel: 'Events',
+          tabBarIcon: ({ color, size, focused }) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/bottomnavigation/calendar_active.png')}
+                style={[styles.tabIcon, { height: 28, width: 28 }]}
+                tintColor={colors.primary}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bottomnavigation/calendar.png')}
+                style={[styles.tabIcon, { height: 22, width: 22 }]}
+                tintColor={colors.textSecondary}
+              />
+            ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Documents"
+        component={ProfileScreen} // Replace with your Favorites screen
         options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Text style={[styles.tabIcon, { color, fontSize: size }]}>👤</Text>
-          ),
+          tabBarLabel: 'Documents',
+          tabBarIcon: ({ color, size, focused }) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/bottomnavigation/docs_active.png')}
+                tintColor={colors.primary}
+                style={styles.tabIcon}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bottomnavigation/docs.png')}
+                style={styles.tabIcon}
+                tintColor={'grey'}
+              />
+            ),
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="Messages"
         component={SettingsScreen}
         options={{
-          tabBarLabel: 'Settings',
-          tabBarIcon: ({ color, size }) => (
-            <Text style={[styles.tabIcon, { color, fontSize: size }]}>⚙️</Text>
-          ),
+          tabBarLabel: 'Messages',
+          tabBarIcon: ({ color, size, focused }) =>
+            focused ? (
+              <Image
+                source={require('../assets/images/bottomnavigation/messages_active.png')}
+                tintColor={colors.primary}
+                style={styles.tabIcon}
+              />
+            ) : (
+              <Image
+                source={require('../assets/images/bottomnavigation/messages.png')}
+                style={styles.tabIcon}
+                tintColor={'grey'}
+              />
+            ),
         }}
       />
     </Tab.Navigator>
@@ -209,7 +267,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: metrics.spacing.lg,
+    paddingHorizontal: metrics.Hspacing.lg,
     height: 60,
   },
   headerLeft: {
@@ -225,7 +283,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   headerButton: {
-    padding: metrics.spacing.sm,
+    padding: metrics.Hspacing.sm,
     borderRadius: metrics.borderRadius.sm,
   },
   headerTitle: {
@@ -259,6 +317,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   tabIcon: {
-    fontSize: 24,
+    width: 24,
+    height: 24,
   },
 });

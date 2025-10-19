@@ -162,7 +162,7 @@ export default function OtpScreen({ navigation }) {
         <ScrollView
           contentContainerStyle={[
             styles.scrollContent,
-            { paddingTop: ios ? top + metrics.spacing.lg : metrics.spacing.lg + 10 },
+            { paddingTop: ios ? top + metrics.Hspacing.lg : metrics.Hspacing.lg + 10 },
           ]}
           keyboardShouldPersistTaps="handled"
         >
@@ -170,9 +170,9 @@ export default function OtpScreen({ navigation }) {
             {/* Header */}
             <View style={styles.header}>
               <Text style={styles.logoname}>Heartbeat</Text>
-              <View style={{ height: metrics.spacing.xxl }}></View>
+              <View style={{ height: metrics.Hspacing.xxl }}></View>
               <Text style={styles.title}>GRETTINGS{'\n'}MR.SHIVANG</Text>
-              <View style={{ height: metrics.spacing.md }}></View>
+              <View style={{ height: metrics.Hspacing.md }}></View>
               <Text style={styles.subtitle}>
                 {'Kindly log in with the code we’ve sent you via  '}
                 <Text style={styles.email}>{email || 'your email'}</Text>
@@ -203,7 +203,7 @@ export default function OtpScreen({ navigation }) {
             {isValidating && <Text style={styles.validatingText}>Validating OTP...</Text>}
           </View>
         </ScrollView>
-        <View style={[styles.resendSection, { paddingBottom: ios ? 34 : metrics.spacing.lg }]}>
+        <View style={[styles.resendSection, { paddingBottom: ios ? 34 : metrics.Hspacing.lg }]}>
           <TouchableOpacity
             style={styles.resendButton}
             onPress={handleResendOtp}
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'start',
-    padding: metrics.spacing.lg,
+    padding: metrics.Hspacing.lg,
   },
   content: {
     width: '100%',
@@ -266,14 +266,14 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: metrics.spacing.xxl || 40,
+    marginBottom: metrics.Hspacing.xxl || 40,
   },
   title: {
     fontSize: fontSizes.xxxl || 32,
 
     color: colors.white,
     letterSpacing: 1.5,
-    marginBottom: metrics.spacing.sm || 8,
+    marginBottom: metrics.Hspacing.sm || 8,
     fontFamily: 'Times New Roman',
     textAlign: 'center',
   },
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: metrics.spacing.xl || 32,
+    marginBottom: metrics.Hspacing.xl || 32,
     gap: 12,
   },
   otpInput: {
@@ -313,13 +313,13 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.md,
     color: colors.white,
     fontWeight: fontWeights.semibold,
-    marginTop: -metrics.spacing.lg || -16,
-    marginBottom: metrics.spacing.lg || 16,
+    marginTop: -metrics.Hspacing.lg || -16,
+    marginBottom: metrics.Hspacing.lg || 16,
   },
   resendContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: metrics.spacing.lg || 16,
+    marginTop: metrics.Hspacing.lg || 16,
   },
   resendText: {
     fontSize: fontSizes.md,
@@ -332,8 +332,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   backButton: {
-    marginTop: metrics.spacing.xxl || 40,
-    paddingVertical: metrics.spacing.md || 12,
+    marginTop: metrics.Hspacing.xxl || 40,
+    paddingVertical: metrics.Hspacing.md || 12,
   },
   backButtonText: {
     fontSize: fontSizes.md,
@@ -341,8 +341,8 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.medium,
   },
   hintContainer: {
-    marginTop: metrics.spacing.xxl || 40,
-    padding: metrics.spacing.md || 12,
+    marginTop: metrics.Hspacing.xxl || 40,
+    padding: metrics.Hspacing.md || 12,
     backgroundColor: 'rgba(255, 107, 157, 0.1)',
     borderRadius: metrics.borderRadius.md || 12,
     borderWidth: 1,
@@ -358,12 +358,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: metrics.spacing.md,
+    padding: metrics.Hspacing.md,
     alignItems: 'center',
   },
   resendButton: {
-    paddingVertical: metrics.spacing.md,
-    paddingHorizontal: metrics.spacing.xl,
+    paddingVertical: metrics.Hspacing.md,
+    paddingHorizontal: metrics.Hspacing.xl,
   },
   resendButtonText: {
     fontSize: fontSizes.sm,

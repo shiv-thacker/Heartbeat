@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: colors.background,
-    padding: metrics.spacing.xl,
+    padding: metrics.Hspacing.xl,
     alignItems: 'center',
-    paddingTop: metrics.spacing.xxl,
+    paddingTop: metrics.Hspacing.xxl,
   },
   avatar: {
     width: 100,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: metrics.spacing.md,
+    marginBottom: metrics.Hspacing.md,
   },
   avatarText: {
     fontSize: fontSizes.xxxl,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xxl,
     fontWeight: fontWeights.bold,
     color: colors.text,
-    marginBottom: metrics.spacing.xs,
+    marginBottom: metrics.Hspacing.xs,
   },
   email: {
     fontSize: fontSizes.md,
@@ -86,19 +86,19 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: colors.background,
-    marginTop: metrics.spacing.md,
-    padding: metrics.spacing.lg,
+    marginTop: metrics.Hspacing.md,
+    padding: metrics.Hspacing.lg,
   },
   sectionTitle: {
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.semibold,
     color: colors.text,
-    marginBottom: metrics.spacing.md,
+    marginBottom: metrics.Hspacing.md,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: metrics.spacing.md,
+    paddingVertical: metrics.Hspacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.medium,
   },
   actionButton: {
-    paddingVertical: metrics.spacing.md,
+    paddingVertical: metrics.Hspacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },

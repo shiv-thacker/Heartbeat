@@ -32,15 +32,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: metrics.spacing.md,
+    padding: metrics.Hspacing.md,
   },
   text: {
-    marginTop: metrics.spacing.md,
+    marginTop: metrics.Hspacing.md,
     fontSize: fontSizes.md,
     color: colors.textSecondary,
   },
   smallText: {
-    marginLeft: metrics.spacing.sm,
+    marginLeft: metrics.Hspacing.sm,
     fontSize: fontSizes.sm,
     color: colors.textSecondary,
   },

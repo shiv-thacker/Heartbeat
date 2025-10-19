@@ -81,20 +81,20 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: colors.background,
-    marginTop: metrics.spacing.md,
-    padding: metrics.spacing.lg,
+    marginTop: metrics.Hspacing.md,
+    padding: metrics.Hspacing.lg,
   },
   sectionTitle: {
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.semibold,
     color: colors.text,
-    marginBottom: metrics.spacing.md,
+    marginBottom: metrics.Hspacing.md,
   },
   settingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: metrics.spacing.md,
+    paddingVertical: metrics.Hspacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   dangerButton: {
-    paddingVertical: metrics.spacing.md,
+    paddingVertical: metrics.Hspacing.md,
   },
   dangerButtonText: {
     fontSize: fontSizes.md,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   versionContainer: {
-    padding: metrics.spacing.xl,
+    padding: metrics.Hspacing.xl,
     alignItems: 'center',
   },
   versionText: {

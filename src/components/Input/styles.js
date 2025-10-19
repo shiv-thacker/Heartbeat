@@ -5,14 +5,14 @@ import metrics from '../../theme/metrics';
 
 export default StyleSheet.create({
   container: {
-    marginBottom: metrics.spacing.md,
+    marginBottom: metrics.Hspacing.md,
   },
   input: {
     height: metrics.inputHeight,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: metrics.borderRadius.md,
-    paddingHorizontal: metrics.spacing.md,
+    paddingHorizontal: metrics.Hspacing.md,
     fontSize: fontSizes.md,
     backgroundColor: colors.white,
   },

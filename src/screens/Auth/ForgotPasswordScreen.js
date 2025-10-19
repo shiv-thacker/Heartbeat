@@ -54,31 +54,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    padding: metrics.spacing.xl,
+    padding: metrics.Hspacing.xl,
     justifyContent: 'center',
   },
   title: {
     fontSize: fontSizes.xxxl,
     fontWeight: fontWeights.bold,
     color: colors.text,
-    marginBottom: metrics.spacing.sm,
+    marginBottom: metrics.Hspacing.sm,
   },
   subtitle: {
     fontSize: fontSizes.md,
     color: colors.textSecondary,
-    marginBottom: metrics.spacing.xl,
+    marginBottom: metrics.Hspacing.xl,
     lineHeight: 22,
   },
   formContainer: {
-    marginTop: metrics.spacing.lg,
+    marginTop: metrics.Hspacing.lg,
   },
   input: {
     height: metrics.inputHeight,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: metrics.borderRadius.md,
-    paddingHorizontal: metrics.spacing.md,
-    marginBottom: metrics.spacing.md,
+    paddingHorizontal: metrics.Hspacing.md,
+    marginBottom: metrics.Hspacing.md,
     fontSize: fontSizes.md,
     backgroundColor: colors.white,
   },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: metrics.spacing.md,
+    marginTop: metrics.Hspacing.md,
   },
   buttonText: {
     color: colors.white,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textAlign: 'center',
-    marginTop: metrics.spacing.lg,
+    marginTop: metrics.Hspacing.lg,
     fontSize: fontSizes.md,
   },
   linkBold: {

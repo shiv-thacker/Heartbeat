@@ -5,35 +5,35 @@ export const colors = {
   tertiary: '#FF1493', // Magenta from logo gradient
 
   // Legacy colors (keeping for compatibility)
-  success: '#34C759',
-  danger: '#FF3B30',
+  success: '#34C759', //
+  danger: '#FF3B30', // red
   warning: '#FF9500',
-  info: '#5AC8FA',
+  info: '#5AC8FA', // blue
 
   // Heartbeat gradient colors
   gradientStart: '#FFDAB9', // Light peach
   gradientEnd: '#FF1493', // Bright magenta
 
   // Background colors
-  background: '#FFFFFF',
-  backgroundDark: '#000000',
-  backgroundSecondary: '#F2F2F7',
-  backgroundSecondaryDark: '#1C1C1E',
+  background: '#FFFFFF', // white
+  backgroundDark: '#000000', // like black
+  backgroundSecondary: '#F2F2F7', //silver
+  backgroundSecondaryDark: '#1C1C1E', // like black
 
   // Text colors
-  text: '#000000',
-  textWhite: '#FFFFFF',
-  textSecondary: '#8E8E93',
-  textTertiary: '#C7C7CC',
+  text: '#000000', // like black
+  textWhite: '#FFFFFF', // white
+  textSecondary: '#8E8E93', // grey
+  textTertiary: '#C7C7CC', // light grey
 
   // Border colors
   border: '#E5E5EA',
-  borderDark: '#38383A',
+  borderDark: '#38383A', // like black
 
   // Utility
-  white: '#FFFFFF',
-  black: '#000000',
-  transparent: 'transparent',
+  white: '#FFFFFF', // white
+  black: '#000000', // like black
+  transparent: 'transparent', // transparent
 };
 
 export default colors;

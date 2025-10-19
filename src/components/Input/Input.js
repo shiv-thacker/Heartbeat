@@ -72,13 +72,13 @@ export default function Input({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: metrics.spacing.md,
+    marginBottom: metrics.Hspacing.md,
   },
   label: {
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.medium,
     color: colors.text,
-    marginBottom: metrics.spacing.xs,
+    marginBottom: metrics.Hspacing.xs,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: metrics.borderRadius.md,
     backgroundColor: colors.white,
-    paddingHorizontal: metrics.spacing.md,
+    paddingHorizontal: metrics.Hspacing.md,
   },
   inputContainerFocused: {
     borderColor: colors.primary,
@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
   multilineInput: {
     height: 100,
     textAlignVertical: 'top',
-    paddingTop: metrics.spacing.sm,
+    paddingTop: metrics.Hspacing.sm,
   },
   leftIcon: {
-    marginRight: metrics.spacing.sm,
+    marginRight: metrics.Hspacing.sm,
   },
   rightIcon: {
-    marginLeft: metrics.spacing.sm,
+    marginLeft: metrics.Hspacing.sm,
   },
   passwordToggle: {
     fontSize: fontSizes.lg,
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: fontSizes.xs,
     color: colors.danger,
-    marginTop: metrics.spacing.xs,
+    marginTop: metrics.Hspacing.xs,
   },
 });
