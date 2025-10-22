@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerButton: {
-    padding: metrics.Hspacing.sm,
+    padding: metrics.Hspacing.xs,
     borderRadius: metrics.borderRadius.sm,
+    color: colors.textSecondary,
   },
   headerTitle: {
     fontSize: fontSizes.lg,
@@ -114,6 +115,6 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     fontSize: 20,
-    color: colors.primary,
+    color: colors.textSecondary,
   },
 });

@@ -1,124 +1,42 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import CustomHeader from '../../../components/CustomHeader/CustomHeader';
 import colors from '../../../theme/colors';
-import { fontSizes, fontWeights } from '../../../theme/fonts';
-import metrics from '../../../theme/metrics';
 
-export default function ProfileScreen() {
+const EventsScreen = () => {
   const user = useSelector((state) => state.user.info);
 
+  const config = {
+    title: 'Events',
+    rightIcon: <Ionicons name="notifications" size={24} color={colors.text} />,
+    rightIcon2: <Ionicons name="search" size={24} color={colors.text} />,
+    onRightPress: () => console.log('Search pressed'),
+    onRightPress2: () => console.log('Notifications pressed'),
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</Text>
-        </View>
-        <Text style={styles.name}>{user?.name || 'User'}</Text>
-        <Text style={styles.email}>{user?.email || 'user@example.com'}</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Information</Text>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Name</Text>
-          <Text style={styles.infoValue}>{user?.name || 'N/A'}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Email</Text>
-          <Text style={styles.infoValue}>{user?.email || 'N/A'}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Member Since</Text>
-          <Text style={styles.infoValue}>October 2025</Text>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Change Password</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <CustomHeader
+        title={config.title}
+        rightIcon={config.rightIcon}
+        rightIcon2={config.rightIcon2}
+        rightIcon3={config.rightIcon3}
+        onRightPress={config.onRightPress}
+        onRightPress2={config.onRightPress2}
+        onRightPress3={config.onRightPress3}
+        user={user}
+      />
+      <Text>Event Screen</Text>
+    </View>
   );
-}
+};
+
+export default EventsScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.backgroundSecondary,
-  },
-  header: {
     backgroundColor: colors.background,
-    padding: metrics.Hspacing.xl,
-    alignItems: 'center',
-    paddingTop: metrics.Hspacing.xxl,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: metrics.Hspacing.md,
-  },
-  avatarText: {
-    fontSize: fontSizes.xxxl,
-    fontWeight: fontWeights.bold,
-    color: colors.white,
-  },
-  name: {
-    fontSize: fontSizes.xxl,
-    fontWeight: fontWeights.bold,
-    color: colors.text,
-    marginBottom: metrics.Hspacing.xs,
-  },
-  email: {
-    fontSize: fontSizes.md,
-    color: colors.textSecondary,
-  },
-  section: {
-    backgroundColor: colors.background,
-    marginTop: metrics.Hspacing.md,
-    padding: metrics.Hspacing.lg,
-  },
-  sectionTitle: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-    color: colors.text,
-    marginBottom: metrics.Hspacing.md,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: metrics.Hspacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  infoLabel: {
-    fontSize: fontSizes.md,
-    color: colors.textSecondary,
-  },
-  infoValue: {
-    fontSize: fontSizes.md,
-    color: colors.text,
-    fontWeight: fontWeights.medium,
-  },
-  actionButton: {
-    paddingVertical: metrics.Hspacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  actionButtonText: {
-    fontSize: fontSizes.md,
-    color: colors.primary,
-    fontWeight: fontWeights.medium,
   },
 });

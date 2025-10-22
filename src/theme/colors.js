@@ -15,7 +15,7 @@ export const colors = {
   gradientEnd: '#FF1493', // Bright magenta
 
   // Background colors
-  background: '#FF6B9D11', // white
+  background: '#FFF6F9', // white with pink touch
   backgroundDark: '#000000', // like black
   backgroundSecondary: '#F2F2F7', //silver
   backgroundSecondaryDark: '#1C1C1E', // like black

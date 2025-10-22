@@ -8,6 +8,7 @@ export const metrics = {
 
   // Hspacing
   Hspacing: {
+    xxs: width * 0.015,
     xs: width * 0.02,
     sm: width * 0.04,
     md: width * 0.08,

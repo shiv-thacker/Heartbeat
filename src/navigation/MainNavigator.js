@@ -11,6 +11,7 @@ import CoursesScreen from '../screens/Courses/Screens/CoursesScreen';
 import DocumentScreen from '../screens/Docs/Screens/DocumentScreen';
 import EventsScreen from '../screens/Events/Screens/EventsScreen';
 import FeedScreen from '../screens/Home/Screens/FeedScreen';
+import MenuScreen from '../screens/Home/Screens/MenuScreen';
 import MessageScreen from '../screens/Messages/Screens/MessageScreen';
 
 const Tab = createBottomTabNavigator();
@@ -56,6 +57,35 @@ const TabIcon = ({
 // Tab Navigator with 5 tabs
 function TabNavigator() {
   return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="TabNavigatorContent"
+        component={TabNavigatorContent}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MenuScreen"
+        component={MenuScreen}
+        options={{
+          headerShown: false,
+          presentation: 'card',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          animation: 'slide_from_right',
+          animationDuration: 300,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// Tab Navigator Content
+function TabNavigatorContent() {
+  return (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
@@ -80,7 +110,7 @@ function TabNavigator() {
               activeImage={require('../assets/images/bottomnavigation/home_active.png')}
               inactiveImage={require('../assets/images/bottomnavigation/home.png')}
               activeTintColor={colors.primary}
-              inactiveTintColor={colors.textSecondary}
+              inactiveTintColor={colors.borderDark}
             />
           ),
         }}
@@ -98,7 +128,7 @@ function TabNavigator() {
               activeSize={{ height: 30, width: 30 }}
               inactiveSize={{ height: 30, width: 30 }}
               activeTintColor={colors.primary}
-              inactiveTintColor={colors.textSecondary}
+              inactiveTintColor={colors.borderDark}
             />
           ),
         }}
@@ -116,7 +146,7 @@ function TabNavigator() {
               activeSize={{ height: 28, width: 28 }}
               inactiveSize={{ height: 22, width: 22 }}
               activeTintColor={colors.primary}
-              inactiveTintColor={colors.textSecondary}
+              inactiveTintColor={colors.borderDark}
             />
           ),
         }}
@@ -132,7 +162,7 @@ function TabNavigator() {
               activeImage={require('../assets/images/bottomnavigation/docs_active.png')}
               inactiveImage={require('../assets/images/bottomnavigation/docs.png')}
               activeTintColor={colors.primary}
-              inactiveTintColor={colors.textSecondary}
+              inactiveTintColor={colors.borderDark}
             />
           ),
         }}
@@ -148,7 +178,7 @@ function TabNavigator() {
               activeImage={require('../assets/images/bottomnavigation/messages_active.png')}
               inactiveImage={require('../assets/images/bottomnavigation/messages.png')}
               activeTintColor={colors.primary}
-              inactiveTintColor={colors.textSecondary}
+              inactiveTintColor={colors.borderDark}
             />
           ),
         }}
