@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import colors from '../theme/colors';
 import { fontSizes, fontWeights } from '../theme/fonts';
@@ -12,7 +13,11 @@ import DocumentScreen from '../screens/Docs/Screens/DocumentScreen';
 import EventsScreen from '../screens/Events/Screens/EventsScreen';
 import FeedScreen from '../screens/Home/Screens/FeedScreen';
 import MenuScreen from '../screens/Home/Screens/MenuScreen';
+import ChatScreen from '../screens/Messages/Screens/ChatScreen';
 import MessageScreen from '../screens/Messages/Screens/MessageScreen';
+import VideoCallScreen from '../screens/Messages/Screens/VideoCallScreen';
+import VoiceCallScreen from '../screens/Messages/Screens/VoiceCallScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -28,6 +33,7 @@ const TabIcon = ({
   inactiveTintColor,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
+  const { bottom } = useSafeAreaInsets();
 
   return (
     <View
@@ -77,6 +83,36 @@ function TabNavigator() {
           gestureDirection: 'horizontal',
           animation: 'slide_from_right',
           animationDuration: 300,
+        }}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+          presentation: 'card',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          animation: 'slide_from_right',
+          animationDuration: 300,
+        }}
+      />
+      <Stack.Screen
+        name="VoiceCallScreen"
+        component={VoiceCallScreen}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="VideoCallScreen"
+        component={VideoCallScreen}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
+          gestureEnabled: false,
         }}
       />
     </Stack.Navigator>
@@ -220,9 +256,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    height: 80,
-    paddingBottom: 20,
-    paddingTop: 8,
+  
+ 
+ 
     elevation: 8,
     shadowColor: colors.black,
     shadowOffset: {
@@ -242,10 +278,8 @@ const styles = StyleSheet.create({
     height: 24,
   },
   tabButtonContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
+
+
     paddingHorizontal: 16,
     marginHorizontal: 8,
     borderRadius: 16,
