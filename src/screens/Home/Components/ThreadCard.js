@@ -3,7 +3,7 @@ import { Audio } from 'expo-av';
 import { useRef, useState } from 'react';
 import { Animated, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { removeThread } from '../../../redux/slices/threadSlice';
+import { addReaction, removeThread } from '../../../redux/slices/threadSlice';
 import colors from '../../../theme/colors';
 import { fontSizes, fontWeights } from '../../../theme/fonts';
 import metrics from '../../../theme/metrics';
@@ -13,12 +13,80 @@ const ThreadCard = ({ thread, navigation }) => {
   const [playingRecordingId, setPlayingRecordingId] = useState(null);
   const [playbackTime, setPlaybackTime] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
+  const [selectedReaction, setSelectedReaction] = useState(null);
   const recordingRef = useRef(null);
   const progressAnim = useRef(new Animated.Value(0)).current;
+  const reactionScale = useRef(new Animated.Value(0)).current;
+  const reactionOpacity = useRef(new Animated.Value(0)).current;
+
+  const emojiReactions = ['👍', '❤️', '😄', '😮', '😢', '🙏'];
 
   const handleDelete = () => {
     dispatch(removeThread(thread.id));
     setShowMenu(false);
+  };
+
+  const handleLongPress = () => {
+    setShowReactions(true);
+    Animated.spring(reactionScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      tension: 100,
+      friction: 8,
+    }).start();
+  };
+
+  const handleReaction = (emoji) => {
+    setSelectedReaction(emoji);
+    
+    // Add reaction to Redux
+    dispatch(addReaction({ threadId: thread.id, reaction: emoji }));
+    
+    setShowReactions(false);
+    
+    // Animate the reaction badge popping up
+    Animated.parallel([
+      Animated.sequence([
+        Animated.spring(reactionScale, {
+          toValue: 1.5,
+          useNativeDriver: true,
+          tension: 150,
+          friction: 3,
+        }),
+        Animated.spring(reactionScale, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 150,
+          friction: 3,
+        }),
+      ]),
+      Animated.timing(reactionOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    
+    // Hide after animation
+    setTimeout(() => {
+      Animated.parallel([
+        Animated.timing(reactionScale, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(reactionOpacity, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        setSelectedReaction(null);
+        reactionScale.setValue(0); // Reset for next animation
+        reactionOpacity.setValue(0); // Reset for next animation
+      });
+    }, 2000);
   };
 
   const formatTime = (seconds) => {
@@ -98,7 +166,13 @@ const ThreadCard = ({ thread, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <>
+    <TouchableOpacity 
+      style={styles.container}
+      onLongPress={handleLongPress}
+      delayLongPress={400}
+      activeOpacity={0.9}
+    >
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.avatar}>
@@ -241,7 +315,67 @@ const ThreadCard = ({ thread, navigation }) => {
             ))}
           </View>
         )}
-    </View>
+
+        {/* Selected Reaction Display */}
+        {selectedReaction && (
+          <Animated.View 
+            style={[
+              styles.selectedReaction,
+              {
+                transform: [{ scale: reactionScale }],
+                opacity: reactionOpacity,
+              }
+            ]}
+          >
+            <Text style={styles.selectedReactionText}>{selectedReaction}</Text>
+          </Animated.View>
+        )}
+
+        {/* Reactions Display */}
+        {thread.reactions && thread.reactions.length > 0 && (
+          <View style={styles.reactionsRow}>
+            {thread.reactions.map((reaction, index) => (
+              <View key={reaction.id || index} style={styles.reactionBadge}>
+                <Text style={styles.reactionBadgeEmoji}>{reaction.emoji}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+    </TouchableOpacity>
+
+    {/* Reactions Modal */}
+    <Modal
+      visible={showReactions}
+      transparent={true}
+      animationType="none"
+      onRequestClose={() => setShowReactions(false)}
+    >
+      <TouchableOpacity 
+        style={styles.reactionsBackdrop}
+        activeOpacity={1}
+        onPress={() => setShowReactions(false)}
+      >
+        <Animated.View 
+          style={[
+            styles.reactionsContainer,
+            {
+              transform: [{ scale: reactionScale }]
+            }
+          ]}
+        >
+          {emojiReactions.map((emoji, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.reactionButton}
+              onPress={() => handleReaction(emoji)}
+            >
+              <Text style={styles.reactionEmoji}>{emoji}</Text>
+            </TouchableOpacity>
+          ))}
+        </Animated.View>
+      </TouchableOpacity>
+    </Modal>
+    </>
   );
 };
 
@@ -428,5 +562,61 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xs,
     color: colors.white,
     fontWeight: fontWeights.semibold,
+  },
+  selectedReaction: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  selectedReactionText: {
+    fontSize: 24,
+  },
+  reactionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginTop: 8,
+  },
+  reactionBadge: {
+    backgroundColor: colors.backgroundSecondary,
+    borderRadius: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  reactionBadgeEmoji: {
+    fontSize: 20,
+  },
+  reactionsBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  reactionsContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    borderRadius: 28,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  reactionButton: {
+    padding: 8,
+  },
+  reactionEmoji: {
+    fontSize: 32,
   },
 });
