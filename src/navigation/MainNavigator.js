@@ -11,6 +11,7 @@ import { fontSizes, fontWeights } from '../theme/fonts';
 import CoursesScreen from '../screens/Courses/Screens/CoursesScreen';
 import DocumentScreen from '../screens/Docs/Screens/DocumentScreen';
 import EventsScreen from '../screens/Events/Screens/EventsScreen';
+import VideoImageViewer from '../screens/Home/Components/VideoImageViewer';
 import FeedScreen from '../screens/Home/Screens/FeedScreen';
 import MenuScreen from '../screens/Home/Screens/MenuScreen';
 import ChatScreen from '../screens/Messages/Screens/ChatScreen';
@@ -113,6 +114,16 @@ function TabNavigator() {
           headerShown: false,
           presentation: 'fullScreenModal',
           gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="VideoImageViewer"
+        component={VideoImageViewer}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          animation: 'fade',
+          animationTypeForReplace: 'push',
         }}
       />
     </Stack.Navigator>

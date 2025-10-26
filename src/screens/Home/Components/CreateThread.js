@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Audio, Video } from 'expo-av';
+import { Audio } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -28,7 +28,7 @@ import metrics from '../../../theme/metrics';
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
 
-const CreateThread = ({ visible, onClose, slideAnim }) => {
+const CreateThread = ({ visible, onClose, slideAnim, navigation }) => {
   const dispatch = useDispatch();
   const { top, bottom } = useSafeAreaInsets();
   const translateY = useRef(new Animated.Value(0)).current;
@@ -43,7 +43,6 @@ const CreateThread = ({ visible, onClose, slideAnim }) => {
   const [playingVideoId, setPlayingVideoId] = useState(null);
   const [playbackTime, setPlaybackTime] = useState({});
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [videoPlayerVisible, setVideoPlayerVisible] = useState(false);
   const recordingAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const textInputRef = useRef(null);
@@ -51,7 +50,6 @@ const CreateThread = ({ visible, onClose, slideAnim }) => {
   const recordingRef = useRef(null);
   const soundObjects = useRef({});
   const progressAnims = useRef({});
-  const videoPlayerRef = useRef(null);
   
   const modalHeight = screenHeight * 0.9;
   
@@ -236,18 +234,20 @@ const CreateThread = ({ visible, onClose, slideAnim }) => {
     setSelectedVideos(prev => prev.filter(video => video.id !== id));
     if (playingVideoId === id) {
       setPlayingVideoId(null);
-      setVideoPlayerVisible(false);
     }
   };
 
   const openVideoPlayer = (videoId) => {
-    setPlayingVideoId(videoId);
-    setVideoPlayerVisible(true);
+    const video = selectedVideos.find(v => v.id === videoId);
+    if (video && navigation) {
+      navigation.navigate('VideoImageViewer', { media: video });
+    }
   };
 
-  const closeVideoPlayer = () => {
-    setPlayingVideoId(null);
-    setVideoPlayerVisible(false);
+  const openImageViewer = (image) => {
+    if (image && navigation) {
+      navigation.navigate('VideoImageViewer', { media: image });
+    }
   };
 
   const removeRecording = (id) => {
@@ -789,10 +789,15 @@ const CreateThread = ({ visible, onClose, slideAnim }) => {
                   <View style={styles.imagesGrid}>
                     {selectedImages.map((image) => (
                       <View key={image.id} style={styles.imageItem}>
-                        <Image 
-                          source={{ uri: image.uri }} 
-                          style={styles.imageThumbnail}
-                        />
+                        <TouchableOpacity 
+                          onPress={() => openImageViewer(image)}
+                          activeOpacity={0.9}
+                        >
+                          <Image 
+                            source={{ uri: image.uri }} 
+                            style={styles.imageThumbnail}
+                          />
+                        </TouchableOpacity>
                         <TouchableOpacity 
                           style={styles.removeImageButton}
                           onPress={() => removeImage(image.id)}
@@ -944,51 +949,6 @@ const CreateThread = ({ visible, onClose, slideAnim }) => {
       </View>
     </Modal>
 
-    {/* Video Player Modal */}
-    {videoPlayerVisible && playingVideoId && (
-      <Modal
-        visible={videoPlayerVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={closeVideoPlayer}
-        style={{height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
-      >
-        <View style={styles.videoPlayerOverlay}>
-          {/* Close Button */}
-          <TouchableOpacity 
-            style={styles.videoCloseButton}
-            onPress={closeVideoPlayer}
-          >
-            <Ionicons name="close" size={24} color={colors.white} />
-          </TouchableOpacity>
-
-          {/* Video Player */}
-          {selectedVideos.find(v => v.id === playingVideoId) && (
-            <Video
-              ref={videoPlayerRef}
-              source={{ uri: selectedVideos.find(v => v.id === playingVideoId).uri }}
-              style={styles.videoPlayer}
-              useNativeControls
-              shouldPlay
-              isLooping={true}
-              resizeMode="contain"
-              onPlaybackStatusUpdate={(status) => {
-                if (!status.isLoaded) {
-                  return;
-                }
-                // When video finishes, pause it instead of replaying
-                if (status.didJustFinish) {
-                  if (videoPlayerRef.current) {
-                    videoPlayerRef.current.pauseAsync();
-                    videoPlayerRef.current.setPositionAsync(0);
-                  }
-                }
-              }}
-            />
-          )}
-        </View>
-      </Modal>
-    )}
     </>
   );
 };
@@ -1272,27 +1232,5 @@ paddingBottom: metrics.Vspacing.sm,
     right: -8,
     backgroundColor: colors.white,
     borderRadius: 10,
-  },
-  videoPlayerOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoCloseButton: {
-    position: 'absolute',
-    top: 60,
-    right: 20,
-    zIndex: 10,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoPlayer: {
-    width: '100%',
-    height: '100%',
   },
 });

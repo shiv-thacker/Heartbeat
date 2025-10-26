@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Audio, Video } from 'expo-av';
+import { Audio } from 'expo-av';
 import { useRef, useState } from 'react';
 import { Animated, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -8,15 +8,12 @@ import colors from '../../../theme/colors';
 import { fontSizes, fontWeights } from '../../../theme/fonts';
 import metrics from '../../../theme/metrics';
 
-const ThreadCard = ({ thread }) => {
+const ThreadCard = ({ thread, navigation }) => {
   const dispatch = useDispatch();
   const [playingRecordingId, setPlayingRecordingId] = useState(null);
   const [playbackTime, setPlaybackTime] = useState(0);
-  const [playingVideoId, setPlayingVideoId] = useState(null);
-  const [videoPlayerVisible, setVideoPlayerVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const recordingRef = useRef(null);
-  const videoPlayerRef = useRef(null);
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   const handleDelete = () => {
@@ -88,18 +85,20 @@ const ThreadCard = ({ thread }) => {
   };
 
   const openVideoPlayer = (videoId) => {
-    setPlayingVideoId(videoId);
-    setVideoPlayerVisible(true);
+    const video = thread.videos.find(v => (v.id || thread.videos.indexOf(v)) === videoId);
+    if (video && navigation) {
+      navigation.navigate('VideoImageViewer', { media: video });
+    }
   };
 
-  const closeVideoPlayer = () => {
-    setPlayingVideoId(null);
-    setVideoPlayerVisible(false);
+  const openImageViewer = (image) => {
+    if (image && navigation) {
+      navigation.navigate('VideoImageViewer', { media: image });
+    }
   };
 
   return (
-    <>
-      <View style={styles.container}>
+    <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.avatar}>
@@ -159,6 +158,7 @@ const ThreadCard = ({ thread }) => {
               const isPlaying = playingRecordingId === recording.id;
               return (
                 <View key={recording.id} style={styles.recordingItem}>
+                  <View style={{flex: 1}}>
                   <TouchableOpacity 
                     onPress={() => togglePlayback(recording)}
                     style={styles.playButton}
@@ -169,6 +169,7 @@ const ThreadCard = ({ thread }) => {
                       color={colors.primary} 
                     />
                   </TouchableOpacity>
+                  </View>
                   <View style={styles.recordingInfo}>
                     <View style={styles.progressBarContainer}>
                       <Animated.View 
@@ -197,11 +198,16 @@ const ThreadCard = ({ thread }) => {
         {thread.images && thread.images.length > 0 && (
           <View style={styles.mediaContainer}>
             {thread.images.map((image, index) => (
-              <Image 
-                key={image.id || index} 
-                source={{ uri: image.uri }} 
-                style={styles.mediaImage}
-              />
+              <TouchableOpacity 
+                key={image.id || index}
+                onPress={() => openImageViewer(image)}
+                activeOpacity={0.9}
+              >
+                <Image 
+                  source={{ uri: image.uri }} 
+                  style={styles.mediaImage}
+                />
+              </TouchableOpacity>
             ))}
           </View>
         )}
@@ -235,45 +241,7 @@ const ThreadCard = ({ thread }) => {
             ))}
           </View>
         )}
-      </View>
-
-      {/* Video Player Modal */}
-      {videoPlayerVisible && playingVideoId !== null && (
-        <TouchableOpacity
-          style={styles.videoPlayerOverlay}
-          activeOpacity={1}
-          onPress={closeVideoPlayer}
-        >
-          <View style={styles.videoPlayerContainer}>
-            <TouchableOpacity 
-              style={styles.videoCloseButton}
-              onPress={closeVideoPlayer}
-            >
-              <Ionicons name="close" size={24} color={colors.white} />
-            </TouchableOpacity>
-
-            {thread.videos && thread.videos.find(v => (v.id || thread.videos.indexOf(v)) === playingVideoId) && (
-              <Video
-                ref={videoPlayerRef}
-                source={{ uri: thread.videos.find(v => (v.id || thread.videos.indexOf(v)) === playingVideoId).uri }}
-                style={styles.videoPlayer}
-                useNativeControls
-                shouldPlay
-                isLooping={true}
-                resizeMode="contain"
-                onPlaybackStatusUpdate={(status) => {
-                  if (!status.isLoaded) return;
-                  if (status.didJustFinish && videoPlayerRef.current) {
-                    videoPlayerRef.current.pauseAsync();
-                    videoPlayerRef.current.setPositionAsync(0);
-                  }
-                }}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
-      )}
-    </>
+    </View>
   );
 };
 
@@ -363,12 +331,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.backgroundSecondary,
-    padding: metrics.spacing.sm,
+    paddingHorizontal: metrics.spacing.md,
+    paddingVertical: metrics.Vspacing.xs,
     borderRadius: metrics.borderRadius.md,
     gap: metrics.spacing.sm,
     marginTop: metrics.spacing.sm,
   },
   playButton: {
+
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -377,7 +347,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   recordingInfo: {
-    flex: 1,
+    flex: 10,
+    paddingTop: 10,
+    paddingRight: 10,
   },
   progressBarContainer: {
     height: 3,
@@ -385,14 +357,18 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     overflow: 'hidden',
     marginBottom: metrics.spacing.xxs,
+
+ 
+  
   },
   progressBar: {
     height: '100%',
     backgroundColor: colors.primary,
     borderRadius: 2,
+
   },
   recordingDuration: {
-    fontSize: fontSizes.xs,
+    fontSize: fontSizes.sm,
     color: colors.textSecondary,
     textAlign: 'right',
   },
@@ -452,37 +428,5 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.xs,
     color: colors.white,
     fontWeight: fontWeights.semibold,
-  },
-  videoPlayerOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoPlayerContainer: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoCloseButton: {
-    position: 'absolute',
-    top: 60,
-    right: 20,
-    zIndex: 10,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoPlayer: {
-    width: '100%',
-    height: '100%',
   },
 });

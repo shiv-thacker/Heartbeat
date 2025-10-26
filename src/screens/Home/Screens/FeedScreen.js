@@ -83,7 +83,7 @@ const FeedScreen = ({ navigation }) => {
           </View>
         ) : (
           threads.map((thread) => (
-            <ThreadCard key={thread.id} thread={thread} />
+            <ThreadCard key={thread.id} thread={thread} navigation={navigation} />
           ))
         )}
       </ScrollView>
@@ -108,6 +108,7 @@ const FeedScreen = ({ navigation }) => {
           visible={showCreateThread}
           onClose={closeCreateThread}
           slideAnim={createThreadAnim}
+          navigation={navigation}
         />
       )}
     </View>
