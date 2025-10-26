@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import CustomHeader from '../../../components/CustomHeader/CustomHeader';
 import colors from '../../../theme/colors';
+import { fontSizes, fontWeights } from '../../../theme/fonts';
+import metrics from '../../../theme/metrics';
 
 const EventsScreen = () => {
   const user = useSelector((state) => state.user.info);
@@ -27,7 +29,11 @@ const EventsScreen = () => {
         onRightPress3={config.onRightPress3}
         user={user}
       />
-      <Text>Event Screen</Text>
+      <View style={styles.emptyState}>
+        <Ionicons name="calendar-outline" size={64} color={colors.border} />
+        <Text style={styles.emptyStateText}>No events found</Text>
+        <Text style={styles.emptyStateSubtext}>Check back later for upcoming events</Text>
+      </View>
     </View>
   );
 };
@@ -38,5 +44,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: metrics.Vspacing.xxl,
+  },
+  emptyStateText: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
+    color: colors.text,
+    marginTop: metrics.Vspacing.md,
+  },
+  emptyStateSubtext: {
+    fontSize: fontSizes.sm,
+    color: colors.textSecondary,
+    marginTop: metrics.Vspacing.xs,
+    textAlign: 'center',
   },
 });

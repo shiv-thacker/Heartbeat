@@ -158,7 +158,7 @@ const ThreadCard = ({ thread, navigation }) => {
               const isPlaying = playingRecordingId === recording.id;
               return (
                 <View key={recording.id} style={styles.recordingItem}>
-                  <View style={{flex: 1}}>
+                  <View style={{flex: 1.5}}>
                   <TouchableOpacity 
                     onPress={() => togglePlayback(recording)}
                     style={styles.playButton}
