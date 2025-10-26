@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.regular,
     color: colors.text,
     textAlign: 'center',
-    fontFamily: 'Georgia',
+    fontFamily: 'times new roman',
   },
   headerIcon: {
     fontSize: 20,

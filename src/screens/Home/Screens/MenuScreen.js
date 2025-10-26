@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../../redux/slices/userSlice';
 import colors from '../../../theme/colors';
 import { fontSizes, fontWeights } from '../../../theme/fonts';
 import { metrics } from '../../../theme/metrics';
 
 const MenuScreen = ({ navigation, slideAnim, setShowMenu }) => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.info);
   const { top } = useSafeAreaInsets();
   const ios = Platform.OS === 'ios';
@@ -18,6 +20,12 @@ const MenuScreen = ({ navigation, slideAnim, setShowMenu }) => {
     }).start(() => {
       setShowMenu(false);
     });
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    closeMenu();
+    // Navigation will handle redirecting to auth screens based on Redux state
   };
 
   const config = {
@@ -53,10 +61,18 @@ const MenuScreen = ({ navigation, slideAnim, setShowMenu }) => {
           <View style={styles.spacer} />
         </View>
         <View style={styles.menuContent}>
-          <Text style={styles.menuItem}>Profile</Text>
-          <Text style={styles.menuItem}>Settings</Text>
-          <Text style={styles.menuItem}>Help</Text>
-          <Text style={styles.menuItem}>Logout</Text>
+          <TouchableOpacity style={styles.menuItemContainer}>
+            <Text style={styles.menuItem}>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItemContainer}>
+            <Text style={styles.menuItem}>Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItemContainer}>
+            <Text style={styles.menuItem}>Help</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={handleLogout}>
+            <Text style={[styles.menuItem, styles.logoutText]}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </View>
@@ -112,11 +128,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 20,
   },
+  menuItemContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
   menuItem: {
     fontSize: 16,
     color: colors.text,
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+  },
+  logoutText: {
+    color: colors.danger,
   },
 });

@@ -37,7 +37,7 @@ const ChatScreen = ({ navigation }) => {
       <View style={[styles.header, { paddingTop: top + 12 }]}>
         {/* Back Button */}
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={26} color={colors.text} />
+          <Ionicons name="chevron-back" size={26} color={colors.text} />
         </TouchableOpacity>
 
         {/* User Info */}
