@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import colors from '../../../theme/colors';
 import { fontSizes, fontWeights } from '../../../theme/fonts';
@@ -10,6 +11,16 @@ const ChatScreen = ({ navigation }) => {
   const route = useRoute();
   const { user } = route.params || {};
   const { top, bottom } = useSafeAreaInsets();
+  const scaleAnim = useRef(new Animated.Value(0.7)).current;
+
+  useEffect(() => {
+    // Zoom in animation on mount
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const handleVoiceCall = () => {
     console.log('Starting voice call with:', user.name);
@@ -32,7 +43,12 @@ const ChatScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View 
+      style={[
+        styles.container,
+        { transform: [{ scale: scaleAnim }] }
+      ]}
+    >
       {/* Custom Header */}
       <View style={[styles.header, { paddingTop: top + 12 }]}>
         {/* Back Button */}
@@ -90,7 +106,7 @@ const ChatScreen = ({ navigation }) => {
           <Ionicons name="send" size={18} color={colors.white} />
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

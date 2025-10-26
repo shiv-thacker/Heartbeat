@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Image, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import colors from '../theme/colors';
@@ -71,7 +71,7 @@ function TabNavigator() {
     >
       <Stack.Screen
         name="TabNavigatorContent"
-        component={TabNavigatorContent}
+        component={TabNavigatorWithAnimation}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -127,6 +127,31 @@ function TabNavigator() {
         }}
       />
     </Stack.Navigator>
+  );
+}
+
+// Wrapper component for zoom-in animation
+function TabNavigatorWithAnimation() {
+  const scaleAnim = useRef(new Animated.Value(0.7)).current;
+
+  useEffect(() => {
+    // Zoom in animation on mount
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  return (
+    <Animated.View 
+      style={{
+        flex: 1,
+        transform: [{ scale: scaleAnim }],
+      }}
+    >
+      <TabNavigatorContent />
+    </Animated.View>
   );
 }
 

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Video } from 'expo-av';
 import { useEffect, useRef, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import colors from '../../../theme/colors';
 
@@ -13,6 +13,7 @@ const VideoImageViewer = ({ route, navigation }) => {
   const [playbackDuration, setPlaybackDuration] = useState(0);
   const [showControls, setShowControls] = useState(true);
   const videoRef = useRef(null);
+  const scaleAnim = useRef(new Animated.Value(0.7)).current;
   
   const media = route?.params?.media;
 
@@ -21,6 +22,15 @@ const VideoImageViewer = ({ route, navigation }) => {
       setIsImage(!media.duration); // If no duration, it's an image
     }
   }, [media]);
+
+  useEffect(() => {
+    // Zoom in animation on mount
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   useEffect(() => {
     if (!isImage && videoRef.current) {
@@ -69,7 +79,12 @@ const VideoImageViewer = ({ route, navigation }) => {
   if (!media) return null;
 
   return (
-    <View style={styles.overlay}>
+    <Animated.View 
+      style={[
+        styles.overlay,
+        { transform: [{ scale: scaleAnim }] }
+      ]}
+    >
       {/* Close Button */}
       <TouchableOpacity 
         style={[styles.closeButton, { top: top + 20 }]}
@@ -153,7 +168,7 @@ const VideoImageViewer = ({ route, navigation }) => {
           )}
         </View>
       )}
-    </View>
+    </Animated.View>
   );
 };
 
