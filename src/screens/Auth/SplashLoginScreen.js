@@ -1,16 +1,17 @@
 import { Image } from 'expo-image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Animated,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { setTempEmail } from '../../redux/slices/userSlice';
 import colors from '../../theme/colors';
@@ -20,6 +21,17 @@ import metrics from '../../theme/metrics';
 export default function SplashLoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
+  const { bottom } = useSafeAreaInsets();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Fade in animation on mount
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const handleSendOtp = () => {
     // Validate email
@@ -40,13 +52,9 @@ export default function SplashLoginScreen({ navigation }) {
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+    <View
+      style={[styles.container, { paddingBottom: bottom }]}
+     
     >
       <Image
         source={require('../../assets/images/splash_background.png')}
@@ -58,7 +66,7 @@ export default function SplashLoginScreen({ navigation }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
-          padding: metrics.Hspacing.lg,
+          padding: metrics.Hspacing.sm,
           height: '100%',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -76,7 +84,7 @@ export default function SplashLoginScreen({ navigation }) {
         </View>
 
         {/* Login Form */}
-        <View style={styles.signInBox}>
+        <Animated.View style={[styles.signInBox, { opacity: fadeAnim }]}>
           <TextInput
             style={styles.input}
             placeholder="Email Address"
@@ -91,14 +99,14 @@ export default function SplashLoginScreen({ navigation }) {
             <Text style={styles.loginButtonText}>Send OTP</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={handleNavigateToRegister} style={styles.registerLink}>
+          {/* <TouchableOpacity onPress={handleNavigateToRegister} style={styles.registerLink}>
             <Text style={styles.linkText}>
               Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
             </Text>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
+        </Animated.View>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
   },
   signInBox: {
     width: '100%',
-    paddingBottom: metrics.Hspacing.xxl,
+    paddingBottom: metrics.Hspacing.sm,
   },
   input: {
     width: '100%',
@@ -152,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.transparent,
     borderBottomColor: colors.border || '#E0E0E0',
     borderRadius: metrics.borderRadius.md || 8,
-    marginBottom: metrics.Hspacing.md || 12,
+    marginBottom: metrics.Vspacing.xs || 12,
     fontSize: fontSizes.md,
     color: colors.white,
   },
@@ -162,7 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: metrics.borderRadius.md || 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: metrics.Hspacing.sm || 8,
+    // marginTop: metrics.Hspacing.sm || 8,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
