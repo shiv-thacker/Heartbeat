@@ -136,8 +136,7 @@ const CreateThread = ({ visible, onClose, slideAnim, navigation }) => {
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 4],
+        allowsEditing: false,
         quality: 0.8,
       });
 
@@ -207,19 +206,31 @@ const CreateThread = ({ visible, onClose, slideAnim, navigation }) => {
   const handleGallery = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
         quality: 0.8,
+        videoMaxDuration: 60,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
-        const newImage = {
-          id: Date.now(),
-          uri: result.assets[0].uri,
-          type: 'gallery',
-        };
-        setSelectedImages(prev => [...prev, newImage]);
+        result.assets.forEach(asset => {
+          if (asset.type === 'image') {
+            const newImage = {
+              id: Date.now() + Math.random(),
+              uri: asset.uri,
+              type: 'gallery',
+            };
+            setSelectedImages(prev => [...prev, newImage]);
+          } else if (asset.type === 'video') {
+            const newVideo = {
+              id: Date.now() + Math.random(),
+              uri: asset.uri,
+              type: 'gallery-video',
+              duration: asset.duration,
+            };
+            setSelectedVideos(prev => [...prev, newVideo]);
+          }
+        });
       }
     } catch (err) {
       console.error('Failed to open gallery:', err);
